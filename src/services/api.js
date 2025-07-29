@@ -21,6 +21,23 @@ const aiClient = axios.create({
   }
 })
 
+// 为 aiClient 添加请求拦截器
+aiClient.interceptors.request.use(
+  config => {
+    const userStore = useUserStore()
+    const token = userStore.token
+    
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
+    
+    return config
+  },
+  error => {
+    return Promise.reject(error)
+  }
+)
+
 // 请求拦截器
 apiClient.interceptors.request.use(
   config => {
