@@ -2,6 +2,7 @@ import axios from 'axios'
 import { API_CONFIG } from '../config'
 import { useUserStore } from '../stores/user'
 import router from '../router'
+import { supabase } from '../supabase' // 导入 Supabase 客户端
 
 // 创建axios实例
 const apiClient = axios.create({
@@ -21,39 +22,23 @@ const aiClient = axios.create({
   }
 })
 
-// 为 aiClient 添加请求拦截器
-aiClient.interceptors.request.use(
-  config => {
-    const userStore = useUserStore()
-    const token = userStore.token
-    
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`
-    }
-    
-    return config
-  },
-  error => {
-    return Promise.reject(error)
-  }
-)
+// 统一的请求拦截器，用于自动附加认证令牌
+const authInterceptor = async (config) => {
+  // 从 Supabase 获取当前会话
+  // 这是获取令牌最可靠的方式，因为它直接来自 Supabase Auth 模块
+  const { data: { session } } = await supabase.auth.getSession();
 
-// 请求拦截器
-apiClient.interceptors.request.use(
-  config => {
-    const userStore = useUserStore()
-    const token = userStore.token
-    
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`
-    }
-    
-    return config
-  },
-  error => {
-    return Promise.reject(error)
+  if (session?.access_token) {
+    // 如果会话和访问令牌存在，则将其添加到 Authorization 请求头中
+    config.headers['Authorization'] = `Bearer ${session.access_token}`;
   }
-)
+  
+  return config;
+};
+
+// 将拦截器应用到两个 axios 实例上
+aiClient.interceptors.request.use(authInterceptor, error => Promise.reject(error));
+apiClient.interceptors.request.use(authInterceptor, error => Promise.reject(error));
 
 // 响应拦截器
 apiClient.interceptors.response.use(
