@@ -4,28 +4,17 @@
 
 // API基础URL配置
 export const API_CONFIG = {
-  // 后端API基础URL
-  BASE_URL: process.env.NODE_ENV === 'production'
-    ? 'https://cloud1-0g0mbccz12f37fb3-1354189051.tcloudbaseapp.com/api'
-    : 'http://localhost:8080/api',
+  // 后端API基础URL (如果您的项目有非AI的后端，可以在此配置)
+  // VITE_APP_BASE_API_URL 是您需要在Vercel前端项目中设置的环境变量
+  BASE_URL: import.meta.env.VITE_APP_BASE_API_URL || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080/api'),
   
-  // AI服务API基础URL
-  MULTI_AGENT_URL: process.env.NODE_ENV === 'production'
-    ? 'https://cloud1-0g0mbccz12f37fb3-1354189051.tcloudbaseapp.com/ai/multi-agent'
-    : 'http://localhost:8000',
-  SINGLE_AGENT_URL: process.env.NODE_ENV === 'production'
-    ? 'https://cloud1-0g0mbccz12f37fb3-1354189051.tcloudbaseapp.com/ai/single-agent'
-    : 'http://localhost:8001',
-  
-  // 统一AI服务URL（用于新的API服务）
-  aiServiceURL: process.env.NODE_ENV === 'production'
-    ? 'https://cloud1-0g0mbccz12f37fb3-1354189051.tcloudbaseapp.com/ai'
-    : 'http://localhost:8000',
-  
-  // 后端API基础URL（用于新的API服务）
-  baseURL: process.env.NODE_ENV === 'production'
-    ? 'https://cloud1-0g0mbccz12f37fb3-1354189051.tcloudbaseapp.com/api'
-    : 'http://localhost:8080',
+  // 多智能体服务API基础URL
+  // VITE_MULTI_AGENT_API_URL 是您需要在Vercel前端项目中设置的环境变量
+  MULTI_AGENT_URL: import.meta.env.VITE_MULTI_AGENT_API_URL || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8000'),
+
+  // 单智能体服务API基础URL
+  // VITE_SINGLE_AGENT_API_URL 是您需要在Vercel前端项目中设置的环境变量
+  SINGLE_AGENT_URL: import.meta.env.VITE_SINGLE_AGENT_API_URL || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8001'),
   
   // 请求超时时间（毫秒）
   TIMEOUT: 30000
