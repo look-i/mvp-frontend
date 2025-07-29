@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/single-agent/:path*",
+      "destination": "https://mvp-single-agent-pm7nilbwq-likys-projects-0f9a16b6.vercel.app/:path*"
+    },
+    {
+      "source": "/multi-agent/:path*",
+      "destination": "https://mvp-multi-agent-lsiona5kc-likys-projects-0f9a16b6.vercel.app/:path*"
+    }
+  ]
+}
