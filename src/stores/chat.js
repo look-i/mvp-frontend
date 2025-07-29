@@ -153,17 +153,8 @@ export const useChatStore = defineStore('chat', {
           console.error('从多智能体系统获取对话列表失败:', error)
         }
         
-        // 从后端系统获取普通对话列表
-        let normalConversations = []
-        try {
-          const response = await chatAPI.getConversations()
-          normalConversations = response.data
-        } catch (error) {
-          console.error('从后端系统获取对话列表失败:', error)
-        }
-        
-        // 合并对话列表
-        this.conversations = [...aiConversations, ...normalConversations]
+        // 我们现在只从一个来源（多智能体服务）获取对话，所以直接赋值
+        this.conversations = aiConversations
         this.loadedFromServer = true
         
         // 保存到缓存
